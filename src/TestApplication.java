@@ -4,6 +4,7 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class TestApplication extends JFrame
 {
@@ -17,6 +18,8 @@ public class TestApplication extends JFrame
     private JTextField employeeName;
     private JButton fireButton;
     private DefaultListModel namesListModel;
+    private ArrayList<Risk> riskList;
+
     public TestApplication()
     {
         setContentPane(mainPanel);
