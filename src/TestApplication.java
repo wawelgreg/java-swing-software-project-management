@@ -6,6 +6,7 @@ public class TestApplication extends JFrame{
     private JTextField projName;
     private JTextPane projDescription;
     private JList list1;
+    private JTable table1;
 
     public TestApplication()
     {
