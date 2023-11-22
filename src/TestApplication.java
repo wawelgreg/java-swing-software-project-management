@@ -17,11 +17,18 @@ public class TestApplication extends JFrame
     private JButton hireButton;
     private JTextField employeeName;
     private JButton fireButton;
+    private JButton addRiskButton;
+    private JButton updateRiskButton;
+    private JButton deleteRiskButton;
+    private JTextField riskName;
+    private JTextPane riskDescription;
+    private JList riskList;
+    private JTextField riskScore;
     private DefaultListModel namesListModel;
-    private ArrayList<Risk> riskList;
+    private DefaultListModel riskListModel;
+    private ArrayList<Risk> riskArrayList;
 
-    public TestApplication()
-    {
+    public TestApplication() {
         setContentPane(mainPanel);
         setTitle("Greg Test");
         setSize(600, 600);
@@ -101,6 +108,61 @@ public class TestApplication extends JFrame
 
                     namesList.setSelectedIndex(index);
                     namesList.ensureIndexIsVisible(index);
+                }
+            }
+        });
+
+        // Risks section
+        riskListModel = new DefaultListModel();
+        riskList.setModel(riskListModel);
+        riskArrayList = new ArrayList<>();
+
+        addRiskButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String rName = riskName.getText();
+                String rDesc = riskDescription.getText();
+                int rScore = Integer.parseInt(riskScore.getText());
+
+                //User did not type in a unique name...
+                if (rName.equals("") || rDesc.equals("")) {
+                    Toolkit.getDefaultToolkit().beep();
+                    employeeName.requestFocusInWindow();
+                    employeeName.selectAll();
+                    return;
+                }
+
+                Risk riskObject = new Risk(rName, rDesc, rScore);
+
+                int index = riskList.getSelectedIndex(); //get selected index
+                if (index == -1) { //no selection, so insert at beginning
+                    index = 0;
+                } else {           //add after the selected item
+                    index++;
+                }
+
+                riskListModel.insertElementAt(riskName.getText(), index);
+                riskArrayList.add(index, riskObject);
+
+                //Reset the text field.
+                employeeName.requestFocusInWindow();
+                employeeName.setText("");
+
+                //Select the new item and make it visible.
+                namesList.setSelectedIndex(index);
+                namesList.ensureIndexIsVisible(index);
+            }
+        });
+
+        riskList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int listIndex = riskList.getSelectedIndex();
+                    Risk riskObject = riskArrayList.get(listIndex);
+                    riskName.setText(riskObject.getRiskName());
+                    riskDescription.setText(riskObject.getRiskDescription());
+                    riskScore.setText(String.valueOf(riskObject.getRiskProbability()));
                 }
             }
         });
