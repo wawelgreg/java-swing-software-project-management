@@ -32,9 +32,32 @@ public class TestApplication extends JFrame
     private JTextField funcText;
     private JList nonfList;
     private JTextField nonfText;
+    private JTextField textField1;
+    private JButton addButton0;
+    private JTextField textField2;
+    private JButton addButton1;
+    private JTextField textField3;
+    private JButton addButton3;
+    private JTextField textField4;
+    private JButton addButton2;
+    private JTextField textField5;
+    private JButton addButton4;
+    private JLabel out1;
+    private JLabel out2;
+    private JLabel out3;
+    private JLabel out4;
+    private JLabel out5;
     private DefaultListModel namesListModel;
     private DefaultListModel riskListModel;
     private ArrayList<Risk> riskArrayList;
+
+    private DefaultListModel functionalListModel;
+    private DefaultListModel nonfunctionalListModel;
+    private int one = 0;
+    private int two = 0;
+    private int three = 0;
+    private int four = 0;
+    private int five = 0;
 
     public TestApplication() {
         setContentPane(mainPanel);
@@ -44,6 +67,8 @@ public class TestApplication extends JFrame
         setVisible(true);
         fireButton.setEnabled(false);
         deleteRiskButton.setEnabled(false);
+        deleteButtonFunc.setEnabled(false);
+        deleteButtonNonf.setEnabled(false);
 
         // General Section //
         // Names list
@@ -216,6 +241,192 @@ public class TestApplication extends JFrame
                     riskList.setSelectedIndex(index);
                     riskList.ensureIndexIsVisible(index);
                 }
+            }
+        });
+
+        // Functional and non-functional section
+        functionalListModel = new DefaultListModel();
+        funcList.setModel(functionalListModel);
+        nonfunctionalListModel = new DefaultListModel();
+        nonfList.setModel(nonfunctionalListModel);
+        addButtonFunc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = funcText.getText();
+
+                //User did not type in a unique name...
+                if (name.equals("")) {
+                    Toolkit.getDefaultToolkit().beep();
+                    funcText.requestFocusInWindow();
+                    funcText.selectAll();
+                    return;
+                }
+
+                int index = funcList.getSelectedIndex(); //get selected index
+                if (index == -1) { //no selection, so insert at beginning
+                    index = 0;
+                } else {           //add after the selected item
+                    index++;
+                }
+
+               functionalListModel.insertElementAt(funcText.getText(), index);
+
+                //Reset the text field.
+                funcText.requestFocusInWindow();
+                funcText.setText("");
+
+                //Select the new item and make it visible.
+                funcList.setSelectedIndex(index);
+                funcList.ensureIndexIsVisible(index);
+            }
+        });
+
+        addButtonNonf.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String name = nonfText.getText();
+
+                //User did not type in a unique name...
+                if (name.equals("")) {
+                    Toolkit.getDefaultToolkit().beep();
+                    nonfText.requestFocusInWindow();
+                    nonfText.selectAll();
+                    return;
+                }
+
+                int index = nonfList.getSelectedIndex(); //get selected index
+                if (index == -1) { //no selection, so insert at beginning
+                    index = 0;
+                } else {           //add after the selected item
+                    index++;
+                }
+
+                nonfunctionalListModel.insertElementAt(nonfText.getText(), index);
+
+                //Reset the text field.
+                nonfText.requestFocusInWindow();
+                nonfText.setText("");
+
+                //Select the new item and make it visible.
+                nonfList.setSelectedIndex(index);
+                nonfList.ensureIndexIsVisible(index);
+            }
+        });
+
+        funcList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    if (funcList.getSelectedIndex() == -1) {
+                        //No selection, disable fire button.
+                        deleteButtonFunc.setEnabled(false);
+                    } else {
+                        //Selection, enable the fire button.
+                        deleteButtonFunc.setEnabled(true);
+                    }
+                }
+            }
+        });
+        nonfList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    if (nonfList.getSelectedIndex() == -1) {
+                        //No selection, disable fire button.
+                        deleteButtonNonf.setEnabled(false);
+                    } else {
+                        //Selection, enable the fire button.
+                        deleteButtonNonf.setEnabled(true);
+                    }
+                }
+            }
+        });
+
+        deleteButtonFunc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = funcList.getSelectedIndex();
+                functionalListModel.remove(index);
+
+                int size = functionalListModel.getSize();
+
+                if (size == 0) { //Nobody's left, disable firing.
+                    deleteButtonFunc.setEnabled(false);
+
+                } else { //Select an index.
+                    if (index == functionalListModel.getSize()) {
+                        //removed item in last position
+                        index--;
+                    }
+
+                    funcList.setSelectedIndex(index);
+                    funcList.ensureIndexIsVisible(index);
+                }
+            }
+        });
+        deleteButtonNonf.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int index = nonfList.getSelectedIndex();
+                nonfunctionalListModel.remove(index);
+
+                int size = nonfunctionalListModel.getSize();
+
+                if (size == 0) { //Nobody's left, disable firing.
+                    deleteButtonNonf.setEnabled(false);
+
+                } else { //Select an index.
+                    if (index == nonfunctionalListModel.getSize()) {
+                        //removed item in last position
+                        index--;
+                    }
+
+                    nonfList.setSelectedIndex(index);
+                    nonfList.ensureIndexIsVisible(index);
+                }
+            }
+        });
+
+        // Effort Tracking
+
+        addButton0.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = Integer.parseInt(textField1.getText());
+                one += input;
+                out1.setText(one+"");
+            }
+        });
+        addButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = Integer.parseInt(textField2.getText());
+                two += input;
+                out2.setText(two+"");
+            }
+        });
+        addButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = Integer.parseInt(textField3.getText());
+                three += input;
+                out3.setText(three+"");
+            }
+        });
+        addButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = Integer.parseInt(textField4.getText());
+                four += input;
+                out4.setText(four+"");
+            }
+        });
+        addButton4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int input = Integer.parseInt(textField5.getText());
+                five += input;
+                out5.setText(five+"");
             }
         });
     }
