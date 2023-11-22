@@ -23,6 +23,15 @@ public class TestApplication extends JFrame
     private JTextPane riskDescription;
     private JList riskList;
     private JTextField riskScore;
+    private JScrollPane Requirements;
+    private JList funcList;
+    private JButton addButtonFunc;
+    private JButton deleteButtonFunc;
+    private JButton addButtonNonf;
+    private JButton deleteButtonNonf;
+    private JTextField funcText;
+    private JList nonfList;
+    private JTextField nonfText;
     private DefaultListModel namesListModel;
     private DefaultListModel riskListModel;
     private ArrayList<Risk> riskArrayList;
@@ -34,6 +43,7 @@ public class TestApplication extends JFrame
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
         fireButton.setEnabled(false);
+        deleteRiskButton.setEnabled(false);
 
         // General Section //
         // Names list
@@ -156,12 +166,21 @@ public class TestApplication extends JFrame
         riskList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+                int listIndex = riskList.getSelectedIndex();
+                Risk riskObject = riskArrayList.get(listIndex);
                 if (!e.getValueIsAdjusting()) {
-                    int listIndex = riskList.getSelectedIndex();
-                    Risk riskObject = riskArrayList.get(listIndex);
                     riskName.setText(riskObject.getRiskName());
                     riskDescription.setText(riskObject.getRiskDescription());
                     riskScore.setText(String.valueOf(riskObject.getRiskProbability()));
+                    if (!e.getValueIsAdjusting()) {
+                        if (riskList.getSelectedIndex() == -1) {
+                            //No selection, disable delete button.
+                            deleteRiskButton.setEnabled(false);
+                        } else {
+                            //Selection, enable the delete button.
+                            deleteRiskButton.setEnabled(true);
+                        }
+                    }
                 }
             }
         });
@@ -179,7 +198,24 @@ public class TestApplication extends JFrame
         deleteRiskButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int index = riskList.getSelectedIndex();
+                riskListModel.removeElementAt(index);
+                riskArrayList.remove(index);
 
+                int size = riskListModel.getSize();
+
+                if (size == 0) { //Nobody's left, disable deleting.
+                    deleteRiskButton.setEnabled(false);
+
+                } else { //Select an index.
+                    if (index == riskListModel.getSize()) {
+                        //removed item in last position
+                        index--;
+                    }
+
+                    riskList.setSelectedIndex(index);
+                    riskList.ensureIndexIsVisible(index);
+                }
             }
         });
     }
