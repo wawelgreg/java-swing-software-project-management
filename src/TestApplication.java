@@ -18,7 +18,6 @@ public class TestApplication extends JFrame
     private JTextField employeeName;
     private JButton fireButton;
     private JButton addRiskButton;
-    private JButton updateRiskButton;
     private JButton deleteRiskButton;
     private JTextField riskName;
     private JTextPane riskDescription;
@@ -30,7 +29,7 @@ public class TestApplication extends JFrame
 
     public TestApplication() {
         setContentPane(mainPanel);
-        setTitle("Greg Test");
+        setTitle("Project Management App 3000");
         setSize(600, 600);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setVisible(true);
@@ -141,7 +140,7 @@ public class TestApplication extends JFrame
                     index++;
                 }
 
-                riskListModel.insertElementAt(riskName.getText(), index);
+                riskListModel.insertElementAt(riskName.getText() + ": ("+rScore+")", index);
                 riskArrayList.add(index, riskObject);
 
                 //Reset the text field.
@@ -164,6 +163,23 @@ public class TestApplication extends JFrame
                     riskDescription.setText(riskObject.getRiskDescription());
                     riskScore.setText(String.valueOf(riskObject.getRiskProbability()));
                 }
+            }
+        });
+//        updateRiskButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                int listIndex = riskList.getSelectedIndex();
+//                Risk riskObject = riskArrayList.get(listIndex);
+//                riskObject.setRiskDescription(riskName.getText());
+//                riskObject.setRiskDescription(riskDescription.getText());
+//                riskObject.setRiskProbability(Integer.parseInt(riskScore.getText()));
+//                riskListModel.insertElementAt(riskName.getText() + ": ("+riskObject.getRiskProbability()+")", listIndex);
+//            }
+//        });
+        deleteRiskButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
             }
         });
     }
